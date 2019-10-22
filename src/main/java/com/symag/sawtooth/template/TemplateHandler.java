@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class TemplateHandler implements TransactionHandler {
 
     private final Logger logger = Logger.getLogger(TemplateHandler.class.getName());
-    private String xoNameSpace;
+    private String templateNameSpace;
 
     private JsonRpcServer rpcServer;
     private ObjectMapper mapper;
@@ -31,11 +31,11 @@ public class TemplateHandler implements TransactionHandler {
      */
     public TemplateHandler() {
         try {
-            this.xoNameSpace = Utils.hash512(
+            this.templateNameSpace = Utils.hash512(
                     this.transactionFamilyName().getBytes("UTF-8")).substring(0, 6);
         } catch (UnsupportedEncodingException usee) {
             usee.printStackTrace();
-            this.xoNameSpace = "";
+            this.templateNameSpace = "";
         }
         rpcServer = new JsonRpcServer();
         mapper = new ObjectMapper();
@@ -43,18 +43,18 @@ public class TemplateHandler implements TransactionHandler {
 
     @Override
     public String transactionFamilyName() {
-        return "xo";
+        return "template";
     }
 
     @Override
     public String getVersion() {
-        return "1.0";
+        return "0.1";
     }
 
     @Override
     public Collection<String> getNameSpaces() {
         ArrayList<String> namespaces = new ArrayList<>();
-        namespaces.add(this.xoNameSpace);
+        namespaces.add(this.templateNameSpace);
         return namespaces;
     }
 
@@ -90,7 +90,7 @@ public class TemplateHandler implements TransactionHandler {
         if (rpcMethod.isEmpty()) {
             throw new InvalidTransactionException("rpcMethod is required");
         }
-        TemplateService templateService = new TemplateService(this.xoNameSpace, instanceName, signerPublicKey, stateStore);
+        TemplateService templateService = new TemplateService(this.templateNameSpace, instanceName, signerPublicKey, stateStore);
 
         //call the matching method as specified in JSON-RPC document
         String response = rpcServer.handle(rpcMethod, templateService);
