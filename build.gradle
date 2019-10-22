@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'com.symag.sawtooth'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.hyperledger.sawtooth:sawtooth-sdk-transaction-processor:v0.1.2'
+    implementation 'com.github.arteam:simple-json-rpc-server:0.10'
+    runtime 'net.logstash.logback:logstash-logback-encoder:5.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
