@@ -12,5 +12,5 @@ In order to build the source you need to install
 
 ## build the source
 ```
-gradlew build
+gradlew shadowJar
 ```
