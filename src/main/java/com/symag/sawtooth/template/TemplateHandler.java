@@ -48,7 +48,7 @@ public class TemplateHandler implements TransactionHandler {
 
     @Override
     public String getVersion() {
-        return "0.1";
+        return "0.2";
     }
 
     @Override
@@ -76,16 +76,13 @@ public class TemplateHandler implements TransactionHandler {
             BlocksyCall payloadMap = mapper.readValue(payload, BlocksyCall.class);
             instanceName = (String) payloadMap.instance_name;
             rpcMethod = (String) payloadMap.rpc;
-            signerPublicKey = (String) payloadMap.signer_pub_key; //blocksy's entity pub key (representing instance of contract)
+            signerPublicKey = header.getSignerPublicKey();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
             throw new InvalidTransactionException("Failed to decode Blocksy's payload");
         }
         if (instanceName.isEmpty()) {
             throw new InvalidTransactionException("instanceName is required");
-        }
-        if (signerPublicKey.isEmpty()) {
-            throw new InvalidTransactionException("signerPublicKey is required");
         }
         if (rpcMethod.isEmpty()) {
             throw new InvalidTransactionException("rpcMethod is required");

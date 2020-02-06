@@ -36,27 +36,23 @@ class TemplateService {
 
     /**
      * Init a new contract instance
-     * @param ownerPublicKey
      * @throws TransactionOwnerException
      * @throws InstanceAlreadyInitializedException
      * @throws ReadWriteStateException
      */
     @JsonRpcMethod
-    public void init(@JsonRpcParam("ownerPublicKey") String ownerPublicKey) throws TransactionOwnerException, InstanceAlreadyInitializedException, ReadWriteStateException {
+    public void init() throws TransactionOwnerException, InstanceAlreadyInitializedException, ReadWriteStateException {
         logger.info("called init !");
-        if (!this.signerPublicKey.equals(ownerPublicKey)) {
-            throw new TransactionOwnerException();
-        }
 
         //Check if instance is already initialized ?
-        String ownerPublicKeyAddress = SawtoothHelper.getUniqueAddress(transactionFamilyNameSpace, instanceName, PREFIX_ADR_INSTANCE, "ownerPublicKey");
+        String ownerPublicKeyAddress = SawtoothHelper.getUniqueAddress(transactionFamilyNameSpace, instanceName, PREFIX_ADR_INSTANCE, "ownerId");
         Map<String, ByteString> result = null;
         result = SawtoothHelper.getState(state, Collections.singletonList(ownerPublicKeyAddress));
         if (! result.get(ownerPublicKeyAddress).isEmpty() ) {
             throw new InstanceAlreadyInitializedException("Instance " + instanceName + " is already initialized.");
         }
         Collection<Map.Entry<String, ByteString>> addressValues = Arrays.asList(
-                SawtoothHelper.encodeState(SawtoothHelper.getUniqueAddress(transactionFamilyNameSpace, instanceName, PREFIX_ADR_INSTANCE, "ownerPublicKey"), ownerPublicKey)
+                SawtoothHelper.encodeState(SawtoothHelper.getUniqueAddress(transactionFamilyNameSpace, instanceName, PREFIX_ADR_INSTANCE, "ownerId"), this.signerPublicKey)
         );
 
         SawtoothHelper.setState(state, addressValues);
