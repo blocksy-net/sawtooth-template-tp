@@ -7,7 +7,7 @@ You can get more informations about BlockSY here  https://blocksy-wiki.symag.com
 ## install
 
 In order to build the source you need to install
-- Java 8 SE SDK
+- Java 11 SDK
 
 
 ## build the source
